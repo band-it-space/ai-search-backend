@@ -1,0 +1,14 @@
+fastapi
+uvicorn
+pandas
+openpyxl
+xlrd>=2.0.1
+python-multipart
+pymilvus[model]
+numpy
+langchain
+openai
+langchain-community
+tiktoken
+pdfplumber
+docx2txt
