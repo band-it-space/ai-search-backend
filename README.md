@@ -78,7 +78,11 @@ cd <НАЗВА_ПАПКИ>
 Створіть файл `.env` у корені проєкту та додайте потрібні змінні середовища. Наприклад:
 
 ```env
-OPENAI_API_KEY=your-api-key-here
+MILVUS_HOST="milvus"
+MILVUS_PORT="19530"
+MILVUS_COLLECTION="goods_import"
+EMBEDDING_DIM=3072
+OPENAI_API_KEY=sk-proj-
 ```
 
 ---
