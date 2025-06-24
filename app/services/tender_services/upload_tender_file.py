@@ -16,6 +16,7 @@ def extract_lines_from_docx(content: bytes) -> list[str]:
     text = docx2txt.process(io.BytesIO(content))
     return [line.strip() for line in text.splitlines() if line.strip()]
 
+
 def upload_tender_file(request: Request, filename: str, content: bytes, tender_name: str) -> Dict:
     try:
         df = pd.read_excel(io.BytesIO(content))
@@ -32,6 +33,7 @@ def upload_tender_file(request: Request, filename: str, content: bytes, tender_n
 
         queries = [entry["tovar_name"] for entry in lines]
         counts_map = {entry["tovar_name"]: entry["count"] for entry in lines}
+        
         all_results = search_by_queries(request, queries, limit=50)
 
 

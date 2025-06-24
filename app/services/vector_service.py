@@ -59,7 +59,7 @@ def search_similar_products(request: Request, query: str, limit: int = 10):
 
     query_embedding: OpenAIEmbeddings = openai_embeddings.embed_query(query)
     query_embedding = np.array(query_embedding, dtype=np.float32).tolist()
-    
+    logger.info(f'Query:{query}')
     results = collection.search(
         data=[query_embedding],
         anns_field="embedding",
@@ -67,10 +67,11 @@ def search_similar_products(request: Request, query: str, limit: int = 10):
         limit=limit,
         output_fields=["text", "name", "costs", "costs_NDS", "tovar_name", "name_tovar_1C", "date_prihod"]
     )
-
+    logger.info(f'Results:{results}')
     unique_suppliers = {}
     for hits in results:
         for hit in hits:
+            logger.info(f'distance:{hit.distance}')
             if hit.distance >= 0.5:
                 supplier_name = hit.entity.get("name")
                 if supplier_name not in unique_suppliers:
@@ -86,7 +87,7 @@ def search_similar_products(request: Request, query: str, limit: int = 10):
                     }
 
         items = list(unique_suppliers.values())
-        logger.info(items)
+        logger.info(f'Items:{items}')
 
         items_text = "\n".join(
             f"- Назва: {item['tovar_name']}\n  1С: {item['name_tovar_1C']}\n Постачальник: {item['name']}\n"
@@ -104,14 +105,14 @@ def search_similar_products(request: Request, query: str, limit: int = 10):
         )
 
         result = None
-        while result is None or result.get("response") is None:
-            result = assistant_manager.get_task_result(task_id)
-            time.sleep(1)
+        # while result is None or result.get("response") is None:
+        #     result = assistant_manager.get_task_result(task_id)
+        #     time.sleep(1)
 
         logger.info(f"app.services.vector_service.py | result: {result}")
 
-        relevant_names = result["response"][0].get("relevant_products", [])
+        # relevant_names = result["response"][0].get("relevant_products", [])
 
-        items = [item for item in items if item["tovar_name"] in relevant_names]
+        # items = [item for item in items if item["tovar_name"] in relevant_names]
 
     return items
