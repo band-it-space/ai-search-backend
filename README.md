@@ -65,8 +65,8 @@ pip3 --version
 > Якщо репозиторій розміщено на GitHub:
 
 ```bash
-git clone <URL_РЕПОЗИТОРІЮ>
-cd <НАЗВА_ПАПКИ>
+git clone https://github.com/band-it-space/ai-search-backend.git
+cd ai-search-backend
 ```
 
 Або передайте архів через SCP/FileZilla та перейдіть у папку проєкту.
