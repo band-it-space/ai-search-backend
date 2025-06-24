@@ -83,6 +83,7 @@ MILVUS_PORT="19530"
 MILVUS_COLLECTION="goods_import"
 EMBEDDING_DIM=3072
 OPENAI_API_KEY=sk-proj-
+ASSISTANT_ID=asst_
 ```
 
 ---
@@ -91,12 +92,12 @@ OPENAI_API_KEY=sk-proj-
 
 У корені проєкту повинні бути файли:
 
-* `docker-compose.yml`
-* `Dockerfile`
-* `requirements.txt`
-* `milvus.yaml`
-* папка `app/`
-* файл `.env`
+-   `docker-compose.yml`
+-   `Dockerfile`
+-   `requirements.txt`
+-   `milvus.yaml`
+-   папка `app/`
+-   файл `.env`
 
 ---
 
@@ -122,11 +123,11 @@ docker compose ps
 
 ### 10. Доступ до інтерфейсів
 
-* **FastAPI Swagger**: [http://your-server-ip:8000/docs](http://your-server-ip:8000/docs)
-* **FastAPI Redoc**: [http://your-server-ip:8000/redoc](http://your-server-ip:8000/redoc)
-* **MinIO Web UI**: [http://your-server-ip:9001](http://your-server-ip:9001)
-  Логін: `minioadmin`, Пароль: `minioadmin`
-* **Milvus Monitoring (Prometheus)**: [http://your-server-ip:9091/healthz](http://your-server-ip:9091/healthz)
+-   **FastAPI Swagger**: [http://your-server-ip:8000/docs](http://your-server-ip:8000/docs)
+-   **FastAPI Redoc**: [http://your-server-ip:8000/redoc](http://your-server-ip:8000/redoc)
+-   **MinIO Web UI**: [http://your-server-ip:9001](http://your-server-ip:9001)
+    Логін: `minioadmin`, Пароль: `minioadmin`
+-   **Milvus Monitoring (Prometheus)**: [http://your-server-ip:9091/healthz](http://your-server-ip:9091/healthz)
 
 ---
 

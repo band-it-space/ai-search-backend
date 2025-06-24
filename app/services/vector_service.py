@@ -7,6 +7,7 @@ from utils.logging import setup_logger
 from db.base import openai_embeddings, OPENAI_API_KEY, ASSISTANT_ID, COLLECTION_NAME, MILVUS_HOST, MILVUS_PORT, drop_collection
 from db.goods_collection import initialize_goods_collection, record_exists
 from fastapi import Request
+from core.manager import assistant_manager
 
 logger = setup_logger("debug")
 
@@ -55,11 +56,10 @@ def store_product_records(records: List[dict], batch_size: int = 1000):
 
 
 def search_similar_products(request: Request, query: str, limit: int = 10):
-    assistant_manager = request.app.state.assistant_manager
 
     query_embedding: OpenAIEmbeddings = openai_embeddings.embed_query(query)
     query_embedding = np.array(query_embedding, dtype=np.float32).tolist()
-    logger.info(f'Query:{query}')
+    # logger.info(f'Query:{query}')
     results = collection.search(
         data=[query_embedding],
         anns_field="embedding",
@@ -67,12 +67,13 @@ def search_similar_products(request: Request, query: str, limit: int = 10):
         limit=limit,
         output_fields=["text", "name", "costs", "costs_NDS", "tovar_name", "name_tovar_1C", "date_prihod"]
     )
-    logger.info(f'Results:{results}')
+    # logger.info(f'Results:{results}')
     unique_suppliers = {}
     for hits in results:
         for hit in hits:
-            logger.info(f'distance:{hit.distance}')
             if hit.distance >= 0.5:
+                # logger.info(f'distance:{hit.distance}')
+                # logger.info(f'tovar_name:{hit.entity.get("tovar_name")}')
                 supplier_name = hit.entity.get("name")
                 if supplier_name not in unique_suppliers:
                     unique_suppliers[supplier_name] = {
@@ -105,14 +106,15 @@ def search_similar_products(request: Request, query: str, limit: int = 10):
         )
 
         result = None
-        # while result is None or result.get("response") is None:
-        #     result = assistant_manager.get_task_result(task_id)
-        #     time.sleep(1)
+        while result is None or result.get("response") is None:
+            logger.info(result)
+            result = assistant_manager.get_task_result(task_id)
+            time.sleep(1)
 
         logger.info(f"app.services.vector_service.py | result: {result}")
 
-        # relevant_names = result["response"][0].get("relevant_products", [])
+        relevant_names = result["response"][0].get("relevant_products", [])
 
-        # items = [item for item in items if item["tovar_name"] in relevant_names]
+        items = [item for item in items if item["tovar_name"] in relevant_names]
 
     return items
